@@ -1,7 +1,5 @@
-# Caso queira utilizar em um ambiente como por exemplo Google Colab ou Jupyter
-# !pip install pycoingecko fredapi ta keras-tuner arch pmdarima numba
 # Bibliotecas para serem importadas no Google Colab
-# !pip install pycoingecko fredapi ta keras-tuner arch pmdarima
+# !pip install pycoingecko fredapi ta keras-tuner arch pmdarima numba
 import numpy as np  # Biblioteca para manipulação numérica e álgebra linear
 import pandas as pd  # Biblioteca para manipulação e análise de dados
 import matplotlib.pyplot as plt  # Biblioteca para criação de gráficos e visualizações
@@ -74,7 +72,8 @@ tf.get_logger().setLevel('ERROR')
 contratoToken = '0xcc42724c6683b7e57334c4e856f4c9965ed682bd'
 combinacaoMaxima = 405
 combinacaoTestada = 80
-
+diasProjetar = 30
+nomeToken = ''
 
 # Classe para apresentar o progresso em barras do treinamento do modelo LSTM de acordo com o ajuste de
 # hiperparâmetros usando o Keras Tuner
@@ -164,6 +163,10 @@ def fetch_data(contract_address, start_date, end_date, sleep_time=10, max_retrie
     token_info = cg.get_coin_info_from_contract_address_by_id(id='binance-smart-chain',
                                                               contract_address=contract_address)
     coin_id = token_info['id']
+
+    if contract_address == contratoToken:
+      nomeToken = token_info['symbol'].upper()
+
 
     for i in range(max_retries):
         try:
@@ -815,8 +818,8 @@ def main():
     ensemble_test_preds = (lstm_weight * lstm_test_preds) + (arima_weight * arima_test_preds) + (
             ridge_weight * ridge_test_preds) + (gb_weight * gb_test_preds)
 
-    # Prever os preços nos próximos 3 meses
-    future_dates = pd.date_range(start=data.index[-1], periods=30)[1:]  # 90 dias no futuro (aproximadamente 3 meses)
+    # Prever os preços de acordo com o período escolhido
+    future_dates = pd.date_range(start=data.index[-1], periods=diasProjetar)[1:]  # Escolher os próximos dias para projetar
 
     X_input = np.array(X_scaled[-best_time_steps:])
 
@@ -880,7 +883,7 @@ def main():
 
     # Plotar os resultados
     plot_results(data, all_predictions_df,
-                 title="Previsão de Preços de Ações para os Próximos 30 dias (LSTM + ARIMA + Ridge + Gradient Boosting)")
+                 title="Previsão de Preços (LSTM + ARIMA + Ridge + Gradient Boosting) para o Token: " + nomeToken )
     plt.show()
 
 
@@ -896,6 +899,7 @@ def analyze_trend(data, all_predictions_df, ensemble_test_preds):
     else:
         trend = "cair"
 
+    print("Desenvolvido por Bruno Araujo")
     print(f"O preço deve {trend} para ${predicted_price_in_3_months:.2f} nos próximos 30 dias.")
 
 
@@ -914,7 +918,7 @@ def plot_results(data, all_predictions_df, title):
              linewidth=2, linestyle=':')
 
     # IMPRESSÃO DOS RESULTADOS DO INDICADOR
-    print("Projeção Ensemble (LSTM + ARIMA + Ridge + Gradient Boosting)")
+    print(f"Projeção Ensemble (LSTM + ARIMA + Ridge + Gradient Boosting) - {nomeToken}")
     print(all_predictions_df['Ensemble_Prediction'])
 
     plt.xlabel('Data')
@@ -927,3 +931,4 @@ def plot_results(data, all_predictions_df, title):
 
 if __name__ == "__main__":
     main()
+
