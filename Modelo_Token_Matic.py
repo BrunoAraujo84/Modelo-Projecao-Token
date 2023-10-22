@@ -1,4 +1,4 @@
-# Bibliotecas para serem importadas no Google Colab
+# Bibliotecas para serem importadas no Google Colab ou Jupyter
 # !pip install pycoingecko fredapi ta keras-tuner arch pmdarima numba
 import numpy as np  # Biblioteca para manipulação numérica e álgebra linear
 import pandas as pd  # Biblioteca para manipulação e análise de dados
