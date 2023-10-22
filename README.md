@@ -1,3 +1,11 @@
+[![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://github.com/BrunoAraujo84/ERC20-Token-Newcoin/blob/main/LICENSE)
+
+![GitHub top language](https://img.shields.io/github/languages/top/BrunoAraujo84/ERC20-Token-Newcoin)
+
+![GitHub last commit](https://img.shields.io/github/last-commit/BrunoAraujo84/ERC20-Token-Newcoin)
+
+![Contribuições bem-vindas](https://img.shields.io/badge/contribuições-bem_vindas-brightgreen.svg?style=flat)
+
 # Modelo de Previsão de Preço de Token
 
 ## Descrição

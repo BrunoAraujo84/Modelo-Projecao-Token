@@ -1,4 +1,4 @@
-# Bibliotecas para serem importadas no Google Colab
+# Bibliotecas para serem importadas no Google Colab ou Jupyter
 # !pip install pycoingecko fredapi ta keras-tuner arch pmdarima numba
 import numpy as np  # Biblioteca para manipulação numérica e álgebra linear
 import pandas as pd  # Biblioteca para manipulação e análise de dados
@@ -70,8 +70,8 @@ tf.get_logger().setLevel('ERROR')
 # VARIÁVEIS GLOBAL
 # MATIC - Rede BNB Chain
 contratoToken = '0xcc42724c6683b7e57334c4e856f4c9965ed682bd'
-combinacaoMaxima = 405
-combinacaoTestada = 80
+combinacaoMaxima = 400
+combinacaoTestada = 75
 diasProjetar = 30
 nomeToken = ''
 
@@ -394,7 +394,6 @@ def scale_1d_data(y):
 # A função cross_validate_lstm realiza a validação cruzada do modelo LSTM usando a divisão de séries temporais. Ela
 # normaliza os dados, divide-os em subconjuntos de treinamento e validação, cria sequências temporais,
 # treina o modelo LSTM e calcula a pontuação média de validação.
-@njit
 def cross_validate_lstm(X, y, hp, time_steps, lstm_units, dropout_rate):
     # Normalize os dados antes de dividir
     X_norm, _ = normalize_3d_data(X)
@@ -594,7 +593,6 @@ def add_volatility_to_data(data, garch_fitted):
 
 # A função prepare_input_data prepara os dados de entrada para o modelo LSTM, criando um array temporário e
 # preenchendo-o com os valores de X. Retorna o array temporário.
-@njit
 def prepare_input_data(X, time_steps, num_features):
     # Criar um array temporário para armazenar os dados de entrada
     X_temp = np.zeros((1, time_steps, num_features))
@@ -654,7 +652,6 @@ def ridge_future_predictions(ridge_model, X_input, n_days):
 
 
 # Esta função é semelhante à função ridge_future_predictions, mas usa um modelo Gradient Boosting treinado para fazer as previsões.
-@njit
 def gb_future_predictions(gb_model, X_input, n_days):
     future_preds = []
     for _ in range(n_days):
@@ -899,7 +896,6 @@ def analyze_trend(data, all_predictions_df, ensemble_test_preds):
     else:
         trend = "cair"
 
-    print("Desenvolvido por Bruno Araujo")
     print(f"O preço deve {trend} para ${predicted_price_in_3_months:.2f} nos próximos 30 dias.")
 
 
@@ -918,8 +914,8 @@ def plot_results(data, all_predictions_df, title):
              linewidth=2, linestyle=':')
 
     # IMPRESSÃO DOS RESULTADOS DO INDICADOR
-    print(f"Projeção Ensemble (LSTM + ARIMA + Ridge + Gradient Boosting) - {nomeToken}")
-    print(all_predictions_df['Ensemble_Prediction'])
+    # print(f"Projeção Ensemble (LSTM + ARIMA + Ridge + Gradient Boosting) - {nomeToken}")
+    # print(all_predictions_df['Ensemble_Prediction'])
 
     plt.xlabel('Data')
     plt.ylabel('Preço')
@@ -931,4 +927,3 @@ def plot_results(data, all_predictions_df, title):
 
 if __name__ == "__main__":
     main()
-
