@@ -1,4 +1,4 @@
-# Bibliotecas para serem importadas no Google Colab ou Jupyter
+# Bibliotecas para serem importadas no Google Colab
 # !pip install pycoingecko fredapi ta keras-tuner arch pmdarima numba
 import numpy as np  # Biblioteca para manipulação numérica e álgebra linear
 import pandas as pd  # Biblioteca para manipulação e análise de dados
@@ -612,7 +612,6 @@ def prepare_input_data(X, time_steps, num_features):
 
 # Suavização Exponencial Simples (SES) às previsões do LSTM: A função exponential_smoothing aplica a suavização
 # exponencial simples aos dados fornecidos usando o coeficiente alpha. Retorna os dados suavizados.
-@njit
 def exponential_smoothing(data, alpha):
     # Inicializar o array de dados suavizados com o primeiro valor de data
     smoothed_data = np.zeros_like(data)
@@ -640,7 +639,6 @@ def train_gradient_boosting(X_train, y_train, n_estimators=100, learning_rate=0.
 
 
 # Esta função usa um modelo de Regressão Ridge
-@njit
 def ridge_future_predictions(ridge_model, X_input, n_days):
     future_preds = []
     for _ in range(n_days):
